@@ -1,0 +1,134 @@
+===============================================================
+ 1.  For Deploying Postgres Container
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Step -1 
+ Make a directory of postgres on the given server (10.73.122.203) 
+
+Step-2 
+ -pull the docker image of the postgres along with the required version
+
+-----cd data/obs-ca/postgres
+----docker pull postgres:11.3
+
+
+Step -3 
+
+  check if the image is pulled or not .
+  Command - docker images 
+
+
+Step -4  
+     Now launch the Postgres container and defines the postgres password 
+     To run the conatiner 
+
+Command -
+  docker run --name postgres-container -e POSTGRES_PASSWORD=password -d postgres
+ -------------or ------------------
+
+ docker run --name postgres-obs -p 5432:5432 -e POSTGRES_PASSWORD=nia@123 -e POSTGRES_USER=postgres --mount type=bind,source=/data/obs_ca/postgres,destination=/var/lib/postgresql/data -d postgres
+-------------------------------------
+ Step-5 
+
+To start/stop the PostgreSQL container service:
+Execute the below command to stop the PostgreSQL container:
+docker stop postgres-obs
+Execute the below command to start the PostgreSQL container:
+docker start postgres-obs
+
+
+We can check this in pgAdmin
+==============================
+ Create a server in the name - obs_db
+ configure the same in connection by giving username and password..
+
+For Going in to root user
+=========================
+
+
+
+ cd /data/obs_ca/postgres
+-bash: cd: /data/obs_ca/postgres: Permission denied
+[niauser@evosedgel080 ~]$ sudo cd
+[niauser@evosedgel080 ~]$ sudo cd /data/obs_ca/postgres
+[niauser@evosedgel080 ~]$ sudo su
+
+[root@evosedgel080 ~]# cd /data/obs_ca
+[root@evosedgel080 obs_ca]# ls
+postgres
+[root@evosedgel080 obs_ca]# ll
+
+
+[root@evosedgel080 obs_ca]# cd postgres
+[root@evosedgel080 postgres]# ls
+
+
+
+===========================================================================
+ 2.  For DEploying Redis Container
+==========================================================================
+
+
+docker  run -dt \
+--restart=always \
+--name redis_obs \
+-v /data/obs_ca/redis \
+-p 6379:6379 \
+-e TZ="UTC" \
+--log-opt max-size="50m" \
+--log-opt max-file="5" \
+--log-opt compress="True" \
+redis:6.0.9-alpine
+
+===========================================================================
+3 . For Deploying MInio Container
+==========================================================================
+
+
+docker run -dt \
+--restart=always \
+--name minio_obs \
+-v /data/obs_ca/minio_obs:/MinIo/minio_data_dir:z \
+-p 9001:9001 \
+-e MINIO_ACCESS_KEY=freeazaccount \
+-e MINIO_SECRET_KEY=Niacan@123 \
+-e TZ="UTC" \
+--log-opt max-size="50m" \
+--log-opt max-file="5" \
+--log-opt compress="True" \
+10.73.122.202:30002/minio:RELEASE.2020-01-03T19-12-21Z 
+
+
+==========================================================================
+4. For Docker Container 
+========================================================================
+
+docker run -d --name container-registry_obs -p 7015:5000 -v /data/obs_ca/container_registry:/var/lib/registry:z  registry:2.7.1
+
+
+
+
+
+
+
+
+
+
+
+df -h 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
